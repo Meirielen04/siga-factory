@@ -18,23 +18,45 @@ package siga;
  *   - Etapa 4: adicionar um novo perfil (ex.: "SECRETARIA") sem modificar o
  *     código existente, comprovando o respeito ao OCP.
  */
+/* 
+ * exemplo antes da refatoração
+ * public class GerenciadorLogin {
+ * 
+ *     public Painel montarPainel(String tipoUsuario) {
+ *         Painel painel;
+ * 
+ *         // Violação do OCP: um novo perfil = mais um ramo condicional aqui.
+ *         if (tipoUsuario.equals("ALUNO")) {
+ *             painel = new PainelAluno();
+ *         } else if (tipoUsuario.equals("PROFESSOR")) {
+ *             painel = new PainelProfessor();
+ *         } else if (tipoUsuario.equals("COORDENADOR")) {
+ *             painel = new PainelCoordenador();
+ *         } else {
+ *             throw new IllegalArgumentException("Perfil desconhecido: " + tipoUsuario);
+ *         }
+ * 
+ *         painel.montar();
+ *         return painel;
+ *     }
+ * }
+ */
+
+
 public class GerenciadorLogin {
 
-    public Painel montarPainel(String tipoUsuario) {
-        Painel painel;
+    private FabricaPainel fabricaPainel;
 
-        // Violação do OCP: um novo perfil = mais um ramo condicional aqui.
-        if (tipoUsuario.equals("ALUNO")) {
-            painel = new PainelAluno();
-        } else if (tipoUsuario.equals("PROFESSOR")) {
-            painel = new PainelProfessor();
-        } else if (tipoUsuario.equals("COORDENADOR")) {
-            painel = new PainelCoordenador();
-        } else {
-            throw new IllegalArgumentException("Perfil desconhecido: " + tipoUsuario);
-        }
+    public GerenciadorLogin(FabricaPainel fabrica) {
+        this.fabricaPainel = fabrica;
+    }
+
+    public Painel montarPainel(String tipoUsuario) {
+
+        Painel painel = fabricaPainel.criar(tipoUsuario);
 
         painel.montar();
+
         return painel;
     }
 }
