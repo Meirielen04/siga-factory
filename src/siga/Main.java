@@ -45,5 +45,7 @@ public class Main {
         login.montarPainel(new CriadorPainelProfessor());
         System.out.println();
         login.montarPainel(new CriadorPainelCoordenador()); 
+        System.out.println();
+        login.montarPainel(new CriadorPainelSecretaria());
     }
 }
