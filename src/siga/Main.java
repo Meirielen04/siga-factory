@@ -13,15 +13,19 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("=== SIGA - Atividade Factory (código inicial) ===\n");
 
-        FabricaPainel fabricaPainel = new FabricaPainel();
+        /*
+         * Código da Etapa 2 (Simple Factory) comentado para não dar erro de compilação:
+         *
+         * FabricaPainel fabricaPainel = new FabricaPainel();
+         * GerenciadorLogin login = new GerenciadorLogin(fabricaPainel);
+         * 
+         * login.montarPainel("ALUNO");
+         * System.out.println();
+         * login.montarPainel("PROFESSOR");
+         * System.out.println();
+         * login.montarPainel("COORDENADOR");
+         */
 
-        GerenciadorLogin login = new GerenciadorLogin(fabricaPainel);
-
-        login.montarPainel("ALUNO");
-        System.out.println();
-        login.montarPainel("PROFESSOR");
-        System.out.println();
-        login.montarPainel("COORDENADOR");
 
         /*
          * System.out.
@@ -34,5 +38,12 @@ public class Main {
          * println("às subclasses (Factory Method), tornando o código aberto para");
          * System.out.println("extensão sem modificação.");
          */
+
+        GerenciadorLogin login = new GerenciadorLogin();
+        login.montarPainel(new CriadorPainelAluno());
+        System.out.println();
+        login.montarPainel(new CriadorPainelProfessor());
+        System.out.println();
+        login.montarPainel(new CriadorPainelCoordenador()); 
     }
 }

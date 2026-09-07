@@ -4,59 +4,67 @@ package siga;
  * Código INICIAL da atividade — contém o problema PROPOSITAL a refatorar.
  *
  * PROBLEMA — criação direta com if/else e new:
- * o método montarPainel escolhe o painel do usuário com um bloco de condicionais
+ * o método montarPainel escolhe o painel do usuário com um bloco de
+ * condicionais
  * que instancia as classes concretas diretamente (new PainelAluno(), etc.).
  * A cada novo perfil de usuário, é preciso MODIFICAR este método, acrescentando
  * mais um ramo — o que viola o Princípio Aberto/Fechado (OCP) e acopla esta
  * classe a todas as classes concretas de painel.
  *
  * Tarefa:
- *   - Etapa 2: encapsular a criação em uma Simple Factory (uma classe fábrica
- *     que recebe o tipo e devolve o Painel), removendo o "new" concreto daqui.
- *   - Etapa 3: refatorar para o padrão Factory Method (um criador abstrato com
- *     uma subclasse por perfil, que sobrescreve o método de criação).
- *   - Etapa 4: adicionar um novo perfil (ex.: "SECRETARIA") sem modificar o
- *     código existente, comprovando o respeito ao OCP.
+ * - Etapa 2: encapsular a criação em uma Simple Factory (uma classe fábrica
+ * que recebe o tipo e devolve o Painel), removendo o "new" concreto daqui.
+ * - Etapa 3: refatorar para o padrão Factory Method (um criador abstrato com
+ * uma subclasse por perfil, que sobrescreve o método de criação).
+ * - Etapa 4: adicionar um novo perfil (ex.: "SECRETARIA") sem modificar o
+ * código existente, comprovando o respeito ao OCP.
  */
-/* 
+/*
  * exemplo antes da refatoração
  * public class GerenciadorLogin {
  * 
- *     public Painel montarPainel(String tipoUsuario) {
- *         Painel painel;
+ * public Painel montarPainel(String tipoUsuario) {
+ * Painel painel;
  * 
- *         // Violação do OCP: um novo perfil = mais um ramo condicional aqui.
- *         if (tipoUsuario.equals("ALUNO")) {
- *             painel = new PainelAluno();
- *         } else if (tipoUsuario.equals("PROFESSOR")) {
- *             painel = new PainelProfessor();
- *         } else if (tipoUsuario.equals("COORDENADOR")) {
- *             painel = new PainelCoordenador();
- *         } else {
- *             throw new IllegalArgumentException("Perfil desconhecido: " + tipoUsuario);
- *         }
+ * // Violação do OCP: um novo perfil = mais um ramo condicional aqui.
+ * if (tipoUsuario.equals("ALUNO")) {
+ * painel = new PainelAluno();
+ * } else if (tipoUsuario.equals("PROFESSOR")) {
+ * painel = new PainelProfessor();
+ * } else if (tipoUsuario.equals("COORDENADOR")) {
+ * painel = new PainelCoordenador();
+ * } else {
+ * throw new IllegalArgumentException("Perfil desconhecido: " + tipoUsuario);
+ * }
  * 
- *         painel.montar();
- *         return painel;
- *     }
+ * painel.montar();
+ * return painel;
+ * }
  * }
  */
 
-
 public class GerenciadorLogin {
 
-    private FabricaPainel fabricaPainel;
+    /*
+     * Bloco da Etapa 2 (Simple Factory) comentado para a refatoração do Factory
+     * Method:
+     *
+     * private FabricaPainel fabricaPainel;
+     *
+     * public GerenciadorLogin(FabricaPainel fabrica) {
+     * this.fabricaPainel = fabrica;
+     * }
+     *
+     * public Painel montarPainel(String tipoUsuario) {
+     * Painel painel = fabricaPainel.criar(tipoUsuario);
+     * painel.montar();
+     * return painel;
+     * }
+     */
 
-    public GerenciadorLogin(FabricaPainel fabrica) {
-        this.fabricaPainel = fabrica;
-    }
-
-    public Painel montarPainel(String tipoUsuario) {
-
-        Painel painel = fabricaPainel.criar(tipoUsuario);
-
+    public Painel montarPainel(CriadorPainel criador) {
+        Painel painel = criador.criarPainel();
         painel.montar();
-
         return painel;
     }
 }
